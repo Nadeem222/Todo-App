@@ -11,11 +11,14 @@
 
 <body>
   <main>
-    <h1>Todo App</h1>
-    <div class="todo-app">
-      <button id="open-task-form-btn" class="btn large-btn">
-        Add New Task
+    <div class="top">
+      <button>
+        <svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>
       </button>
+      <h1> Todo App</h1>
+    </div>
+    <div class="todo-app">
+      
       <form class="task-form hidden" id="task-form">
         <div class="task-form-header">
           <button id="close-task-form-btn" class="close-task-form-btn" type="button" aria-label="close">
@@ -50,6 +53,13 @@
         </form>
       </dialog>
       <div id="tasks-container"></div>
+      <div class="search">
+        <input type="text" placeholder="Seach Your Task?">
+        <button id="open-task-form-btn" class="large-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16" fill="none"><path d="M8 3.5V12.5M12.5 8H3.5" stroke="white" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span>New Task</span> 
+        </button>
+      </div>
     </div>
   </main>
   <script src="script.js"></script>

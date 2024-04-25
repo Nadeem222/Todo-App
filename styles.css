@@ -4,6 +4,7 @@
     --dark-grey: #0a0a23;
     --yellow: #f1be32;
     --golden-yellow: #feac32;
+    --black: #000
   }
   
   *,
@@ -23,24 +24,48 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-image: url(./bg.ec602496.png);
+    height: 100vh;
   }
   
   h1 {
-    color: var(--light-grey);
-    margin: 20px 0 40px 0;
+    color: var(--black);
+    margin: 0;
+
+    
+  }
+  .top{
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    gap: 10px;
+  }
+  .top button{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--dark-grey);
+    display: block;
+    border: 2px solid #60648F;
+  }
+  .top button:hover{
+    transform: scale(1.1);
+    transition: 0.5s;
+  }
+  .top svg{
+    fill: var(--light-grey);
+    width: 20px;
+    height: 20px;
   }
   
   .todo-app {
-    background-color: var(--white);
-    width: 300px;
-    height: 350px;
-    border: 5px solid var(--yellow);
-    border-radius: 8px;
-    padding: 15px;
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    height: 100vh;
+    width: 70%;
+    padding: 20px;
   }
   
   .btn {
@@ -59,10 +84,37 @@
   }
   
   .large-btn {
-    width: 80%;
+    width: 15%;
+    height: 100%;
     font-size: 1.2rem;
-    align-self: center;
-    justify-self: center;
+    background-color: var(--dark-grey);
+    color: var(--light-grey);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: absolute;
+    right: 0;
+    border-radius: 0px 8px 8px 0px;
+    border: none;
+  }
+  .search{
+    height: 50px;
+    width: 100%;
+    display: flex; 
+    position: relative;
+  }
+  .search input{
+    width: 85%;
+    border: none;
+    border-radius: 8px 0px 0px 8px;
+    padding: 10px;
+    font-size: 18px;
+   
+  }
+  .search input::placeholder{
+    color: #827E7F;
+    font-size: 16px;
+    font-weight: 600;
   }
   
   .close-task-form-btn {
@@ -160,7 +212,6 @@
   }
   
   @media (min-width: 576px) {
-    .todo-app,
     .task-form {
       width: 400px;
       height: 450px;
