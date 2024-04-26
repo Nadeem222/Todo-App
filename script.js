@@ -9,9 +9,12 @@ const tasksContainer = document.getElementById("tasks-container");
 const titleInput = document.getElementById("title-input");
 const dateInput = document.getElementById("date-input");
 const descriptionInput = document.getElementById("description-input");
+const searchInput = document.getElementById('searchInput');
 
 const taskData = JSON.parse(localStorage.getItem("data")) || [];
 let currentTask = {};
+
+
 
 const addOrUpdateTask = () => {
   addOrUpdateTaskBtn.innerText = "Add Task";
@@ -55,6 +58,46 @@ const updateTaskContainer = () => {
     }
   );
 };
+
+const displayTask = (task) => {
+  const { id, title, date, description } = task;
+  const [year, month, bDate] = (date || "").split("-");
+  
+  return `
+    <div class="task" id="${id}">
+      <div class="dateBox"><span> ${month || "???"}</span><span>${bDate || "???"} </span></div>
+      <div class="titleCon">
+        <p><strong>Title:</strong> ${title}</p>
+        <p class="desPara">${description}</p>
+      </div>
+      <button onclick="editTask(this)" type="button">Edit</button>
+      <button onclick="deleteTask(this)" type="button">Delete</button>
+    </div>
+  `;
+};
+
+searchInput.addEventListener( "input" , () =>{
+    let searchInputValue = searchInput.value.toLowerCase();
+
+    const matchingTasks = taskData.filter(
+      (task) => task.title.toLowerCase() === searchInputValue
+    );
+
+    tasksContainer.innerHTML = "";
+
+    if(searchInputValue === ""){
+      updateTaskContainer()
+    }else{
+
+      if (matchingTasks.length > 0) {
+        matchingTasks.forEach((task) => {
+          tasksContainer.innerHTML += displayTask(task);
+        });
+      } else {
+        tasksContainer.innerHTML = "<p>No tasks found with the specified title.</p>";
+      }
+    }
+});
 
 
 const deleteTask = (buttonEl) => {

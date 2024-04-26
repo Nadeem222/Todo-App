@@ -86,14 +86,15 @@
   }
   
   .large-btn {
-    width: 15%;
+    width: 100px;
     height: 100%;
     font-size: 1.2rem;
     background-color: var(--dark-grey);
     color: var(--light-grey);
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 5px;
     position: absolute;
     right: 0;
     border-radius: 0px 8px 8px 0px;
@@ -112,7 +113,7 @@
     position: relative;
   }
   .search input{
-    width: 85%;
+    width: 100%;
     border: none;
     border-radius: 8px 0px 0px 8px;
     padding: 10px;
@@ -229,18 +230,20 @@
   }
   .dateBox{
     display: flex;
+    align-items: center;
     flex-direction: column-reverse;
     background: rgba(256 256 256 / 60%);
     padding: 15px ;
     gap: 5px;
     font-weight: 600;
     border-radius: 35px 0px 0px 0px;
+    width: 60px;
   }
   .titleCon{
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 80%;
+    width: 85%;
     padding: 5px;
     gap: 3px;
   }
@@ -256,7 +259,11 @@
   .hidden {
     display: none;
   }
-  
+  @media (max-width: 768px){
+    .todo-app{
+      width: 90%;
+    }
+  }
   @media (min-width: 576px) {
     .task-form {
       width: 400px;
