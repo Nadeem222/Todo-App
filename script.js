@@ -10,6 +10,7 @@ const titleInput = document.getElementById("title-input");
 const dateInput = document.getElementById("date-input");
 const descriptionInput = document.getElementById("description-input");
 const searchInput = document.getElementById('searchInput');
+const heroSec = document.getElementById('heroSection');
 
 const taskData = JSON.parse(localStorage.getItem("data")) || [];
 let currentTask = {};
@@ -19,6 +20,7 @@ let currentTask = {};
 const addOrUpdateTask = () => {
   addOrUpdateTaskBtn.innerText = "Add Task";
   const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
+  console.log(dataArrIndex);
 
   const taskObj = {
     id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
@@ -58,6 +60,19 @@ const updateTaskContainer = () => {
     }
   );
 };
+
+const heroCard = () => {
+  taskData.forEach(({date}) => {
+    const [year ,month , bDate] = date.split("-");
+    (heroSec.innerHTML += `
+    <div>
+      <span> ${month}</span>
+      <span>${bDate} </span>
+    </div>
+    `)
+  })
+}
+heroCard()
 
 const displayTask = (task) => {
   const { id, title, date, description } = task;
