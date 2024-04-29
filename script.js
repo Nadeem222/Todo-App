@@ -11,31 +11,31 @@ const dateInput = document.getElementById("date-input");
 const descriptionInput = document.getElementById("description-input");
 const searchInput = document.getElementById('searchInput');
 const heroSec = document.getElementById('heroSection');
+const logo = document.getElementById("logo");
 
 
 const taskData = JSON.parse(localStorage.getItem("data")) || [];
 let currentTask = {};
 
 
-
 const addOrUpdateTask = () => {
   addOrUpdateTaskBtn.innerText = "Add Task";
   const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
-  console.log(dataArrIndex);
 
+  
   const taskObj = {
     id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
     title: titleInput.value,
     date: dateInput.value,
     description: descriptionInput.value,
   };
-
+  
   if (dataArrIndex === -1) {
     taskData.unshift(taskObj);
   } else {
     taskData[dataArrIndex] = taskObj;
   }
-
+  
   localStorage.setItem("data", JSON.stringify(taskData));
   updateTaskContainer()
   reset()
@@ -43,55 +43,110 @@ const addOrUpdateTask = () => {
 
 const updateTaskContainer = () => {
   tasksContainer.innerHTML = "";
-
+  
   taskData.forEach(
     ({ id, title, date, description }) => {
       const [year , month , bDate] = date.split("-");
-        (tasksContainer.innerHTML += `
-        <div class="task" id="${id}">
-          <div class="dateBox"><span> ${month}</span><span>${bDate} </span></div>
-          <div class="titleCon">
-            <p><strong>Title:</strong> ${title}</p>
-            <p class="desPara">${description}</p>
+      (tasksContainer.innerHTML += `
+      <div class="task" id="${id}">
+      <div class="dateBox"><span> ${month}</span><span>${bDate} </span></div>
+      <div class="titleCon">
+      <p><strong>Title:</strong> ${title}</p>
+      <p class="desPara">${description}</p>
+      </div>
+      <button onclick="editTask(this)" type="button" ><?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px">    <path d="M 19.171875 2 C 18.448125 2 17.724375 2.275625 17.171875 2.828125 L 16 4 L 20 8 L 21.171875 6.828125 C 22.275875 5.724125 22.275875 3.933125 21.171875 2.828125 C 20.619375 2.275625 19.895625 2 19.171875 2 z M 14.5 5.5 L 3 17 L 3 21 L 7 21 L 18.5 9.5 L 14.5 5.5 z"/></svg></button>
+            <button onclick="deleteTask(this)" type="button" ><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z"/></svg></button> 
+            </div>
+            `)
+          }
+        );
+      };
+      
+      const heroCard = () => {
+        
+        heroSec.innerHTML= "";
+        taskData.forEach(({date}) => {
+          
+          heroSec.innerHTML += `
+          <div class="dateDiv">
+          ${date}
           </div>
-          <button onclick="editTask(this)" type="button" ><?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px">    <path d="M 19.171875 2 C 18.448125 2 17.724375 2.275625 17.171875 2.828125 L 16 4 L 20 8 L 21.171875 6.828125 C 22.275875 5.724125 22.275875 3.933125 21.171875 2.828125 C 20.619375 2.275625 19.895625 2 19.171875 2 z M 14.5 5.5 L 3 17 L 3 21 L 7 21 L 18.5 9.5 L 14.5 5.5 z"/></svg></button>
-          <button onclick="deleteTask(this)" type="button" ><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z"/></svg></button> 
-        </div>
-      `)
+          `
+        })
+      }
+      
+      heroCard()
+      
+      
+      const dateDivs = document.querySelectorAll('.dateDiv');
+      // console.log(dateDivs);
+      
+      dateDivs.forEach ((bottonEl) => {
+        bottonEl.addEventListener('click' , (e) => {
+          
+          dateDivs.forEach((d) => d.style.backgroundColor = "");
+          
+          
+          e.currentTarget.style.backgroundColor ='red'
+          // console.log(e.currentTarget);
+          const dateValue = e.target.innerText;
+          
+          // console.log(dateValue);
+          
+          
+          
+          const matchingTasks = taskData.filter(
+            (task) => task.date === dateValue
+          );
+          tasksContainer.innerHTML = "";
+          
+          
+          if(!dateValue){
+            updateTaskContainer()
+            return
+          }else{
+            if (matchingTasks.length > 0) {
+              matchingTasks.forEach((task) => {
+                tasksContainer.innerHTML += displayTask(task);
+              });
+            } else {
+              tasksContainer.innerHTML = "<p>No tasks found with the specified title.</p>";
+            }
     }
-  );
+  })
+});
+
+
+const displayTask = (task) => {
+  const { id, title, date, description } = task;
+  const [year, month, bDate] = (date || "").split("-");
+  
+  return `
+  <div class="task" id="${id}">
+  <div class="dateBox"><span> ${month || "???"}</span><span>${bDate || "???"} </span></div>
+  <div class="titleCon">
+  <p><strong>Title:</strong> ${title}</p>
+  <p class="desPara">${description}</p>
+  </div>
+  <button onclick="editTask(this)" type="button" ><?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px">    <path d="M 19.171875 2 C 18.448125 2 17.724375 2.275625 17.171875 2.828125 L 16 4 L 20 8 L 21.171875 6.828125 C 22.275875 5.724125 22.275875 3.933125 21.171875 2.828125 C 20.619375 2.275625 19.895625 2 19.171875 2 z M 14.5 5.5 L 3 17 L 3 21 L 7 21 L 18.5 9.5 L 14.5 5.5 z"/></svg></button>
+  <button onclick="deleteTask(this)" type="button" ><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z"/></svg></button> 
+  </div>
+  `;
 };
 
-const heroCard = () => {
-  taskData.forEach(({date}) => {
-    
-    heroSec.innerHTML += `
-    <div id="dateDiv">
-    ${date}
-    </div>
-    `
-  })
-}
-
-heroCard()
-
-
-heroSec.addEventListener('click' , (e) => {
-  const dateValue = e.target.innerText;
-
-  let hope = e.target;
-
-  hope.style.backgroundColor = "" 
+searchInput.addEventListener( "input" , () =>{
+  let searchInputValue = searchInput.value.toLowerCase();
+  
   const matchingTasks = taskData.filter(
-    (task) => task.date === dateValue
+    (task) => task.title.toLowerCase() === searchInputValue
   );
+  
   tasksContainer.innerHTML = "";
-  hope.style.backgroundColor = "red" 
-
-  if(!dateValue){
+  
+  if(searchInputValue === ""){
     updateTaskContainer()
-    return
   }else{
+    
     if (matchingTasks.length > 0) {
       matchingTasks.forEach((task) => {
         tasksContainer.innerHTML += displayTask(task);
@@ -100,46 +155,6 @@ heroSec.addEventListener('click' , (e) => {
       tasksContainer.innerHTML = "<p>No tasks found with the specified title.</p>";
     }
   }
-})
-
-const displayTask = (task) => {
-  const { id, title, date, description } = task;
-  const [year, month, bDate] = (date || "").split("-");
-  
-  return `
-    <div class="task" id="${id}">
-      <div class="dateBox"><span> ${month || "???"}</span><span>${bDate || "???"} </span></div>
-      <div class="titleCon">
-        <p><strong>Title:</strong> ${title}</p>
-        <p class="desPara">${description}</p>
-      </div>
-      <button onclick="editTask(this)" type="button" ><?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px">    <path d="M 19.171875 2 C 18.448125 2 17.724375 2.275625 17.171875 2.828125 L 16 4 L 20 8 L 21.171875 6.828125 C 22.275875 5.724125 22.275875 3.933125 21.171875 2.828125 C 20.619375 2.275625 19.895625 2 19.171875 2 z M 14.5 5.5 L 3 17 L 3 21 L 7 21 L 18.5 9.5 L 14.5 5.5 z"/></svg></button>
-          <button onclick="deleteTask(this)" type="button" ><svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 10 2 L 9 3 L 3 3 L 3 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z"/></svg></button> 
-    </div>
-  `;
-};
-
-searchInput.addEventListener( "input" , () =>{
-    let searchInputValue = searchInput.value.toLowerCase();
-
-    const matchingTasks = taskData.filter(
-      (task) => task.title.toLowerCase() === searchInputValue
-    );
-
-    tasksContainer.innerHTML = "";
-
-    if(searchInputValue === ""){
-      updateTaskContainer()
-    }else{
-
-      if (matchingTasks.length > 0) {
-        matchingTasks.forEach((task) => {
-          tasksContainer.innerHTML += displayTask(task);
-        });
-      } else {
-        tasksContainer.innerHTML = "<p>No tasks found with the specified title.</p>";
-      }
-    }
 });
 
 
@@ -147,25 +162,25 @@ const deleteTask = (buttonEl) => {
   const dataArrIndex = taskData.findIndex(
     (item) => item.id === buttonEl.parentElement.id
   );
-
+  
   buttonEl.parentElement.remove();
   taskData.splice(dataArrIndex, 1);
   localStorage.setItem("data", JSON.stringify(taskData));
 }
 
 const editTask = (buttonEl) => {
-    const dataArrIndex = taskData.findIndex(
+  const dataArrIndex = taskData.findIndex(
     (item) => item.id === buttonEl.parentElement.id
   );
-
+  
   currentTask = taskData[dataArrIndex];
-
+  
   titleInput.value = currentTask.title;
   dateInput.value = currentTask.date;
   descriptionInput.value = currentTask.description;
-
+  
   addOrUpdateTaskBtn.innerText = "Update Task";
-
+  
   taskForm.classList.toggle("hidden");  
 }
 
@@ -182,13 +197,13 @@ if(taskData.length){
 }
 
 openTaskFormBtn.addEventListener("click", () =>
-  taskForm.classList.toggle("hidden")
+taskForm.classList.toggle("hidden")
 );
 
 closeTaskFormBtn.addEventListener("click", () => {
   const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
   const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date || descriptionInput.value !== currentTask.description;
-
+  
   if (formInputsContainValues && formInputValuesUpdated) {
     confirmCloseDialog.showModal();
   } else {
@@ -205,6 +220,12 @@ discardBtn.addEventListener("click", () => {
 
 taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
+  
   addOrUpdateTask();
 });
+logo.addEventListener('click' , () => {
+
+  updateTaskContainer()
+  dateDivs.forEach((d) => d.style.backgroundColor = "");
+})
+
